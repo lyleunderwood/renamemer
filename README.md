@@ -34,12 +34,13 @@ Manual
 You're gonna want to read this because you will get no other instruction inside 
 the app. These are the things you want to do:
 
-1. Download the [release package](https://github.com/lyleunderwood/renamemer/releases/download/1.0.0/renamemer-1.0.0.Yui.win32.zip)
+1. Download the [release package](https://github.com/lyleunderwood/renamemer/releases/) for your platform.
 2. If you want video previews you need to install codecs. I'm gonna assume the
    target market for this either has already installed or knows how to install
    a codec pack. If not, google it.
 3. Extract that bad boy and open up the `renamemer` folder
-4. Navigate into the `bin` directory and run `renamemer.exe`
+4. Navigate into the `bin` directory and run `renamemer.exe` (renamemer.sh for
+   linux)
 5. Choose the target / base directory. You can either do this by typing the
    path in the Base Folder input or by going to File -> Browse something I
    don't remember what it's called. Also tab completion works in the Base
@@ -70,6 +71,16 @@ be a huge pain in the ass so I'm not gonna do it.
 There are some other possible features I've considered like sort of a folder
 hotkey system or something that shows you the possible folders when you have an
 ambiguous tab completion, but we'll see.
+
+Getting GStreamer working in linux
+---
+GStreamer is all dumb in Ubuntu for reasons which are confusing as hell. Here's
+how I got webm previews working:
+
+1. Add this to your sources.list:
+   <tt>deb http://ppa.launchpad.net/mc3man/trusty-media/ubuntu trusty main</tt>
+2. <tt>sudo apt-get update</tt>
+3. <tt>sudo apt-get install gstreamer0.10-ffmpeg</tt>
 
 Development
 ---
