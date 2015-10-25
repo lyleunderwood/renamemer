@@ -8,6 +8,7 @@
 #include <QModelIndex>
 #include <QLineEdit>
 #include <QMediaPlayer>
+#include <QFileDialog>
 
 namespace Ui {
 class MainWindow;
@@ -37,6 +38,8 @@ public:
 
     bool suppressNameChange;
 
+    QFileDialog *browseDialog;
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -55,6 +58,7 @@ public:
     void resetInput(QLineEdit *input);
     void tryFilenameInsert();
 
+    QString sep();
     QString getCurrentFullPath();
     QString dirPathWithSeparator();
     FILE_TYPES findFileType();
@@ -79,6 +83,10 @@ private slots:
     void on_baseField_returnPressed();
 
     void on_nameField_textChanged(const QString &arg1);
+
+    void on_actionExit_triggered();
+
+    void on_actionBrowse_for_base_folder_triggered();
 
 private:
     Ui::MainWindow *ui;

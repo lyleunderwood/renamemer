@@ -13,6 +13,7 @@
 #include <QLabel>
 #include <QGraphicsProxyWidget>
 #include <QRegExp>
+#include <QFileDialog>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent) :
     this->listModel = new QStringListModel();
     this->ui->fileList->setModel(this->listModel);
     this->suppressNameChange = false;
+    this->browseDialog = new QFileDialog(this, "Pick Target Directory");
+
+    this->browseDialog->setFileMode(QFileDialog::Directory);
+    this->browseDialog->setOptions(QFileDialog::ShowDirsOnly);
 
     this->resetInput(this->ui->baseField);
 
@@ -40,6 +45,9 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+    delete this->browseDialog;
+    delete this->player;
+    delete this->listModel;
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -111,12 +119,10 @@ void MainWindow::setCurrentFile(QModelIndex index)
 void MainWindow::commitName()
 {
     QString value = this->ui->nameField->text();
-    std::cout << value.toStdString() << std::endl;
 
     QModelIndex index = this->listModel->index(this->currentFileIndex.row() + 1);
     QModelIndex oldIndex = QModelIndex(this->currentFileIndex);
 
-    std::cout << "comparing: " << value.toStdString() << " == " << this->currentFileName.toStdString() << std::endl;
     if (value != this->currentFileName)
     {
         if (!this->moveCurrentFile(value))
@@ -138,7 +144,6 @@ bool MainWindow::moveCurrentFile(QString newPath)
 {
     QString fullPath = this->dirPathWithSeparator().append(newPath);
     QFile newFile(fullPath);
-    std::cout << "Pretending to move file to: " << fullPath.toStdString() << std::endl;
 
     if (newFile.exists())
     {
@@ -146,7 +151,7 @@ bool MainWindow::moveCurrentFile(QString newPath)
         return false;
     }
 
-    int idx = newPath.lastIndexOf(QDir::separator());
+    int idx = newPath.lastIndexOf(this->sep());
 
     if (idx == -1)
     {
@@ -294,8 +299,8 @@ QString MainWindow::dirPathWithSeparator()
 {
     QString path = QString(this->targetDir->path());
 
-    if (!path.endsWith(QDir::separator())) {
-        path.append(QDir::separator());
+    if (!path.endsWith(this->sep())) {
+        path.append(this->sep());
     }
 
     return path;
@@ -303,7 +308,6 @@ QString MainWindow::dirPathWithSeparator()
 
 bool MainWindow::isFileValid()
 {
-    std::cout << this->getCurrentFullPath().toStdString() << std::endl;
     QFile *file = new QFile(this->getCurrentFullPath());
 
     if (
@@ -400,21 +404,20 @@ void MainWindow::selectFileName()
 
 int MainWindow::findExtensionStart(QString str)
 {
-    int idx = str.lastIndexOf(QChar('.'));
+    return str.lastIndexOf(QChar('.'));
 }
 
 void MainWindow::autocompleteDir(QLineEdit *input)
 {
-    std::cout << "trying autocomplete for: " << input->text().toStdString() << std::endl;
     QString value = input->text();
     QString basePath("");
 
     if (input == this->ui->nameField) {
-        basePath = this->targetDir->absolutePath() + QDir::separator();
+        basePath = this->targetDir->absolutePath() + this->sep();
     }
 
     int cursorPos = input->cursorPosition();
-    int sepPos = value.lastIndexOf(QDir::separator());
+    int sepPos = value.lastIndexOf(this->sep());
 
     if (sepPos > cursorPos) {
         return;
@@ -429,18 +432,15 @@ void MainWindow::autocompleteDir(QLineEdit *input)
     QString dirPart = leftPart.right(leftPart.length() - sepPos);
     QDir dir;
 
-    std::cout << leftPart.toStdString() << " : " << pathPart.toStdString() << " : " << dirPart.toStdString() << " : " << sepPos << std::endl;
-
     dir.setPath(basePath + pathPart);
 
     if (!dir.exists()) {
-        std::cout << dir.absolutePath().toStdString() << " isn't a dir, bailing" << std::endl;
         return;
     }
 
     QStringList dirs = dir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
     QString findPart = QString(dirPart);
-    if (findPart.startsWith(QDir::separator()))
+    if (findPart.startsWith(this->sep()))
     {
         findPart = findPart.right(findPart.length() - 1);
     }
@@ -495,7 +495,7 @@ void MainWindow::autocompleteDir(QLineEdit *input)
     QString completion = completionDir.right(completionDir.length() - findPart.length());
 
     if (dirs.length() == 1) {
-        completion.append(QDir::separator());
+        completion.append(this->sep());
     }
 
     value.insert(cursorPos, completion);
@@ -533,21 +533,23 @@ void MainWindow::tryFilenameInsert()
     QString leftPart = value.left(curPos);
     QString extPart = this->currentFileName.right(this->currentFileName.length() - this->findExtensionStart(this->currentFileName));
 
-    std::cout << rightPart.toStdString() << " : " << extPart.toStdString() << " : " << leftPart.toStdString() << " : " << this->currentFileName.toStdString() << std::endl;
-
-    if (rightPart != extPart || !leftPart.endsWith(QDir::separator()))
+    if (rightPart != extPart || !leftPart.endsWith(this->sep()))
     {
         return;
     }
-
-    std::cout << "gonna set text to " << (leftPart + this->currentFileName).toStdString() << std::endl;
 
     this->suppressNameChange = true;
     this->ui->nameField->setText(leftPart + this->currentFileName);
     this->suppressNameChange = false;
     this->selectFileName();
-    std::cout << curPos << std::endl;
     this->ui->nameField->setCursorPosition(curPos);
+}
+
+QString MainWindow::sep()
+{
+    // so I guess I'll just always use / because I get them from QDir and shit in windows
+    // return QDir::separator();
+    return QString("/");
 }
 
 void MainWindow::on_baseField_textChanged(const QString &path)
@@ -584,4 +586,23 @@ void MainWindow::on_nameField_textChanged(const QString &arg1)
 void MainWindow::on_nameField_textEdited(const QString &arg1)
 {
 
+}
+
+void MainWindow::on_actionExit_triggered()
+{
+    this->close();
+}
+
+void MainWindow::on_actionBrowse_for_base_folder_triggered()
+{
+    this->browseDialog->setDirectory(this->targetDir->absolutePath());
+    this->browseDialog->exec();
+    QStringList dirs = this->browseDialog->selectedFiles();
+
+    if (dirs.length() == 0)
+    {
+        return;
+    }
+
+    this->ui->baseField->setText(dirs.first());
 }
