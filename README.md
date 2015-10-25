@@ -3,7 +3,7 @@ renamemer
 
 I wrote this thing for myself, and I've spent probably around eight hours
 working on it in total. As such, it's not exactly a polished or complete
-application. It should function as intended, but not that it theoretically has
+application. It should function as intended, but note that it theoretically has
 the ability to move around all the files on your computer in a way that could
 break your OS install, like if you pointed it at System32 and started moving
 junk around, obviously that would be bad. What I'm saying is that there are no
@@ -26,7 +26,7 @@ really quickly. Here are some of its killer features:
 
 Basically it makes it so that instead of having to like drag and drop files, or
 right-click -> rename or whatever, dealing with all that slow UI stuff, you
-just type and hit enter. In practice, by far the hardest part of organizer your
+just type and hit enter. In practice, by far the hardest part of organizing your
 memes will be deciding on names for stuff.
 
 Manual
@@ -58,8 +58,8 @@ the app. These are the things you want to do:
    filename. If you add directories by doing like somedir/otherdir/file.png and hit
    ENTER then the whole directory chain will be created automatically and the
    file placed in it and renamed as necessary. Also, directory names can be
-   tab-completed, so you can do stuff like anim_*tab*_k-_*tab*_rit_*tab*_ and
-   it'll fill in folder names for you.
+   tab-completed, so you can do stuff like: anim _**tab**_ k- _**tab**_ rit 
+   _**tab**_ and it'll fill in folder names for you.
 
 That's basically it. So far this thing has been tested on win7 for less than
 five minutes, but it's a pretty simple app so hopefully there aren't a ton of
