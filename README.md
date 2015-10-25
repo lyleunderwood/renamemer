@@ -72,15 +72,31 @@ There are some other possible features I've considered like sort of a folder
 hotkey system or something that shows you the possible folders when you have an
 ambiguous tab completion, but we'll see.
 
-Getting GStreamer working in linux
+Getting webm preview working in Windows
+---
+Basically renamemer needs to be able to find codecs for the video files you
+want to preview. I've tested K-Lite and it seems to work perfectly. CCCP 32bit
+also seems to work. So far I've only put together a 32bit release, so you'll
+need a 32bit webm codec. If you don't have one, or webm isn't working for some
+reason, or you don't want to install a whole codec pack, try downloading the
+most recent webmdshow zip package from
+[here](http://storage.googleapis.com/downloads.webmproject.org/releases/webm/)
+and running the install exe. This should install a 32bit webm codec.
+
+Getting GStreamer working in Ubuntu
 ---
 GStreamer is all dumb in Ubuntu for reasons which are confusing as hell. Here's
 how I got webm previews working:
 
-1. Add this to your sources.list:
-   <tt>deb http://ppa.launchpad.net/mc3man/trusty-media/ubuntu trusty main</tt>
-2. <tt>sudo apt-get update</tt>
-3. <tt>sudo apt-get install gstreamer0.10-ffmpeg</tt>
+Add this to your sources.list:
+```
+deb http://ppa.launchpad.net/mc3man/trusty-media/ubuntu trusty main
+```
+
+And then:
+```
+sudo apt-get update && sudo apt-get install gstreamer0.10-ffmpeg
+```
 
 Development
 ---
