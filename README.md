@@ -80,7 +80,7 @@ also seems to work. So far I've only put together a 32bit release, so you'll
 need a 32bit webm codec. If you don't have one, or webm isn't working for some
 reason, or you don't want to install a whole codec pack, try downloading the
 most recent webmdshow zip package from
-[here](http://storage.googleapis.com/downloads.webmproject.org/releases/webm/)
+[here](http://downloads.webmproject.org/releases/webm/index.html)
 and running the install exe. This should install a 32bit webm codec.
 
 Getting GStreamer working in Ubuntu
