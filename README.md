@@ -34,7 +34,7 @@ Manual
 You're gonna want to read this because you will get no other instruction inside 
 the app. These are the things you want to do:
 
-1. Download the release package (it's a zip)
+1. Download the [release package](https://github.com/lyleunderwood/renamemer/releases/download/1.0.0/renamemer-1.0.0.Yui.win32.zip)
 2. If you want video previews you need to install codecs. I'm gonna assume the
    target market for this either has already installed or knows how to install
    a codec pack. If not, google it.
