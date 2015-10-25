@@ -75,10 +75,14 @@ ambiguous tab completion, but we'll see.
 Getting webm preview working in Windows
 ---
 Basically renamemer needs to be able to find codecs for the video files you
-want to preview. I've tested K-Lite and it seems to work perfectly. CCCP 32bit
-also seems to work. So far I've only put together a 32bit release, so you'll
-need a 32bit webm codec. If you don't have one, or webm isn't working for some
-reason, or you don't want to install a whole codec pack, try downloading the
+want to preview. I've tested K-Lite and it seems to work perfectly. CCCP
+also seems to work. The thing to keep in mind is that you need to download the
+release which matches your codecs, or install codecs to match your release.
+This means if you have 32bit codecs installed, download the 32bit release. If
+you have the 64bit release, download the CCCP 64bit codec pack.
+If you don't have a codec pack, or webm isn't working for some
+reason, or you don't want to install a whole codec pack, try installing the
+32bit release and downloading the
 most recent webmdshow zip package from
 [here](http://downloads.webmproject.org/releases/webm/index.html)
 and running the install exe. This should install a 32bit webm codec.
