@@ -1,6 +1,18 @@
 renamemer
 ===
 
+I wrote this thing for myself, and I've spent probably around eight hours
+working on it in total. As such, it's not exactly a polished or complete
+application. It should function as intended, but not that it theoretically has
+the ability to move around all the files on your computer in a way that could
+break your OS install, like if you pointed it at System32 and started moving
+junk around, obviously that would be bad. What I'm saying is that there are no
+real safeguards, but it's also just a really simple hacked together utility, so
+hopefully it doesn't cause too much trouble. It has exactly as many features as
+I wanted it to have for my own purposes at this point. That being said, if
+anybody else finds it useful and has suggestions or would like it to be a more
+polished experience, I'm open to all that.
+
 So basically this thing enables you to organize a directory full of media files
 really quickly. Here are some of its killer features:
 
