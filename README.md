@@ -34,7 +34,11 @@ Manual
 You're gonna want to read this because you will get no other instruction inside 
 the app. These are the things you want to do:
 
-1. Download the [release package](https://github.com/lyleunderwood/renamemer/releases/) for your platform.
+1. You actually may want to start by reading the note on getting webm previews 
+   working below, as it may effect your decision on which release to use. 
+   Download the 
+   [release package](https://github.com/lyleunderwood/renamemer/releases/) 
+   for your platform.
 2. If you want video previews you need to install codecs. I'm gonna assume the
    target market for this either has already installed or knows how to install
    a codec pack. If not, google it.
