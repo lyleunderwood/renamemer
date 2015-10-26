@@ -21,11 +21,19 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    this->player = new QMediaPlayer(this);
     this->listModel = new QStringListModel();
     this->ui->fileList->setModel(this->listModel);
     this->suppressNameChange = false;
     this->browseDialog = new QFileDialog(this, "Pick Target Directory");
+
+    this->player = NULL;
+    this->previewScene = NULL;
+    this->imageItem = NULL;
+    this->gifLabel = NULL;
+    this->gifMovie = NULL;
+    this->gifProxy = NULL;
+    this->videoItem = NULL;
+    this->playlist = NULL;
 
     this->browseDialog->setFileMode(QFileDialog::Directory);
     this->browseDialog->setOptions(QFileDialog::ShowDirsOnly);
@@ -44,10 +52,11 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
-    delete ui;
     delete this->browseDialog;
-    delete this->player;
     delete this->listModel;
+
+    this->cleanupFilePreview();
+    delete ui;
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
@@ -102,6 +111,8 @@ void MainWindow::updateCurrentFile()
 
 void MainWindow::setCurrentFile(QModelIndex index)
 {
+    this->cleanupFilePreview();
+
     this->currentFileName = QString("");
     this->currentFileIndex = index;
     QVariant row = this->listModel->data(this->currentFileIndex, 0);
@@ -206,18 +217,6 @@ void MainWindow::updateFilePreview()
     QGraphicsScene *scene;
     QGraphicsItem *fitTarget = NULL;
 
-    QGraphicsPixmapItem *imageItem;
-
-    QLabel *gifLabel;
-    QMovie *gifMovie;
-    QGraphicsProxyWidget *gifProxy;
-
-    QGraphicsVideoItem *videoItem;
-    QMediaPlaylist *playlist;
-
-    // stop any videos which may be playing
-    this->player->stop();
-
     // setup the scene and clear current preview first
     if (this->ui->graphicsView->scene())
     {
@@ -240,41 +239,42 @@ void MainWindow::updateFilePreview()
     switch(this->findFileType())
     {
     case TYPE_IMAGE:
-        imageItem = new QGraphicsPixmapItem(QPixmap(this->getCurrentFullPath()));
-        scene->addItem(imageItem);
+        this->imageItem = new QGraphicsPixmapItem(QPixmap(this->getCurrentFullPath()));
+        scene->addItem(this->imageItem);
 
         fitTarget = (QGraphicsItem*)imageItem;
         break;
     case TYPE_GIF:
         // gif is a special case. apparently the only real way to play an animated
         // gif in Qt is with a QLabel
-        gifLabel = new QLabel();
-        gifMovie = new QMovie(this->getCurrentFullPath());
-        gifLabel->setMovie(gifMovie);
-        gifMovie->start();
-        gifProxy = scene->addWidget(gifLabel);
+        this->gifLabel = new QLabel();
+        this->gifMovie = new QMovie(this->getCurrentFullPath());
+        this->gifLabel->setMovie(this->gifMovie);
+        this->gifMovie->start();
+        this->gifProxy = scene->addWidget(this->gifLabel);
 
-        fitTarget = (QGraphicsItem*)gifProxy;
+        fitTarget = (QGraphicsItem*)this->gifProxy;
         break;
     case TYPE_VIDEO:
-        videoItem = new QGraphicsVideoItem();
-        playlist = new QMediaPlaylist();
+        this->videoItem = new QGraphicsVideoItem();
+        this->playlist = new QMediaPlaylist();
+        this->player = new QMediaPlayer();
 
         // apparently we need to explicitly set a size or the call to
         // fitInView later won't know how big the QGraphicsItem is
-        videoItem->setSize(QSizeF(720,480));
+        this->videoItem->setSize(QSizeF(720,480));
 
-        this->player->setVideoOutput(videoItem);
+        this->player->setVideoOutput(this->videoItem);
         scene->addItem(videoItem);
 
         // using a playlist seems to be the easiest way to loop a video
-        playlist->addMedia(QMediaContent(QUrl::fromLocalFile(this->getCurrentFullPath())));
-        playlist->setPlaybackMode(QMediaPlaylist::Loop);
-        this->player->setPlaylist(playlist);
+        this->playlist->addMedia(QMediaContent(QUrl::fromLocalFile(this->getCurrentFullPath())));
+        this->playlist->setPlaybackMode(QMediaPlaylist::Loop);
+        this->player->setPlaylist(this->playlist);
 
         this->player->play();
 
-        fitTarget = (QGraphicsItem*)videoItem;
+        fitTarget = (QGraphicsItem*)this->videoItem;
         break;
     default:
         break;
@@ -283,6 +283,61 @@ void MainWindow::updateFilePreview()
     if (fitTarget != NULL)
     {
         this->ui->graphicsView->fitInView(fitTarget, Qt::KeepAspectRatio);
+    }
+}
+
+void MainWindow::cleanupFilePreview()
+{
+
+    if (this->player)
+    {
+        this->player->stop();
+        delete this->player;
+    }
+
+    if (this->playlist)
+    {
+        delete this->playlist;
+    }
+
+    if (this->videoItem)
+    {
+        delete this->videoItem;
+    }
+
+    if (this->imageItem)
+    {
+        delete this->imageItem;
+    }
+
+    if (this->gifMovie)
+    {
+        this->gifMovie->stop();
+        delete this->gifMovie;
+    }
+
+    if (this->gifLabel != NULL)
+    {
+        delete this->gifLabel;
+    }
+
+    if (this->gifProxy)
+    {
+        //delete this->gifProxy; // segfault. i guess this gets deleted somewhere else.
+    }
+
+    this->player = NULL;
+    this->previewScene = NULL;
+    this->imageItem = NULL;
+    this->gifLabel = NULL;
+    this->gifMovie = NULL;
+    this->gifProxy = NULL;
+    this->videoItem = NULL;
+    this->playlist = NULL;
+
+    if (this->ui->graphicsView->scene())
+    {
+        this->ui->graphicsView->scene()->clear();
     }
 }
 

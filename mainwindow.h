@@ -9,6 +9,9 @@
 #include <QLineEdit>
 #include <QMediaPlayer>
 #include <QFileDialog>
+#include <QGraphicsScene>
+#include <QGraphicsItem>
+#include <QLabel>
 
 namespace Ui {
 class MainWindow;
@@ -35,6 +38,16 @@ public:
     QModelIndex currentFileIndex;
 
     QMediaPlayer *player;
+    QGraphicsScene *previewScene;
+
+    QGraphicsPixmapItem *imageItem;
+
+    QLabel *gifLabel;
+    QMovie *gifMovie;
+    QGraphicsProxyWidget *gifProxy;
+
+    QGraphicsVideoItem *videoItem;
+    QMediaPlaylist *playlist;
 
     bool suppressNameChange;
 
@@ -48,6 +61,7 @@ public:
     void updateCurrentFile();
     void setCurrentFile(QModelIndex index);
     void updateFilePreview();
+    void cleanupFilePreview();
     void commitName();
     bool moveCurrentFile(QString newPath);
     void clearRow(QModelIndex index);
