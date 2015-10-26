@@ -129,6 +129,8 @@ void MainWindow::setCurrentFile(QModelIndex index)
 
 void MainWindow::commitName()
 {
+    this->cleanupFilePreview();
+
     QString value = this->ui->nameField->text();
 
     QModelIndex index = this->listModel->index(this->currentFileIndex.row() + 1);
