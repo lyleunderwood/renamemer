@@ -109,6 +109,8 @@ private slots:
 
     void on_volumeSlider_valueChanged(int value);
 
+    void on_fileList_clicked(const QModelIndex &index);
+
 private:
     Ui::MainWindow *ui;
 };

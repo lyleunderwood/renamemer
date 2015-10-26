@@ -705,3 +705,8 @@ void MainWindow::on_volumeSlider_valueChanged(int value)
 {
     this->setVolume(value);
 }
+
+void MainWindow::on_fileList_clicked(const QModelIndex &index)
+{
+    this->ui->nameField->setFocus();
+}
