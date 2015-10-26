@@ -22,4 +22,4 @@ FORMS    += mainwindow.ui
 RESOURCES += \
     icon.qrc
 
-win32:RC_ICONS += app_icon.ico
+win32:RC_ICONS += resources/app_icon.ico
