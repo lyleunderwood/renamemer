@@ -160,7 +160,7 @@ bool MainWindow::moveCurrentFile(QString newPath)
 
     if (newFile.exists())
     {
-        std::cout << "File already exists: " << fullPath.toStdString() << std::endl;
+        this->showMessage(tr("File already exists: ") + fullPath);
         return false;
     }
 
@@ -176,14 +176,14 @@ bool MainWindow::moveCurrentFile(QString newPath)
     if (dirPath.length() > 0) {
         if (!this->targetDir->mkpath(dirPath))
         {
-            std::cout << "mkpath failed: " << dirPath.toStdString() << std::endl;
+            this->showMessage(tr("Failure trying to create path: ") + dirPath);
             return false;
         }
 
         QDir fullDir(this->dirPathWithSeparator() + dirPath);
         if (!fullDir.exists())
         {
-            std::cout << "fullDir doesn't exist for some reason: " << fullDir.absolutePath().toStdString() << std::endl;
+            this->showMessage(tr("The directory we created doesn't exist for some reason: ") + fullDir.absolutePath());
             return false;
         }
     }
@@ -191,8 +191,11 @@ bool MainWindow::moveCurrentFile(QString newPath)
     QFile oldFile(this->targetDir->filePath(this->currentFileName));
     if (!oldFile.rename(fullPath))
     {
-        std::cout << "rename failed: " << oldFile.fileName().toStdString() << std::endl;
+        this->showMessage(tr("Rename operation failed for some reason: ") + oldFile.fileName());
+        return false;
     }
+
+    this->showMessage(tr("Renamed to: ") + newPath);
 
     return true;
 }
@@ -607,6 +610,12 @@ QString MainWindow::sep()
     // so I guess I'll just always use / because I get them from QDir and shit in windows
     // return QDir::separator();
     return QString("/");
+}
+
+void MainWindow::showMessage(QString message)
+{
+    std::cout << message.toStdString() << std::endl;
+    this->ui->statusBar->showMessage(message);
 }
 
 void MainWindow::on_baseField_textChanged(const QString &path)

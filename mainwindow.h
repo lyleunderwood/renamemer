@@ -71,6 +71,7 @@ public:
     void autocompleteDir(QLineEdit *input);
     void resetInput(QLineEdit *input);
     void tryFilenameInsert();
+    void showMessage(QString message);
 
     QString sep();
     QString getCurrentFullPath();

@@ -115,6 +115,7 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
+  <widget class="QStatusBar" name="statusBar"/>
   <action name="actionBrowse_for_base_folder">
    <property name="text">
     <string>Browse for base folder</string>
