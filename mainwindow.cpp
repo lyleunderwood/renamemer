@@ -78,6 +78,12 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
             this->resetInput((QLineEdit*)obj);
             return true;
         }
+
+        if (obj == this->ui->nameField && key->key() == Qt::Key_Return && key->modifiers() == Qt::SHIFT)
+        {
+            this->previousRow();
+            return true;
+        }
     }
     return false;
 }
@@ -109,6 +115,15 @@ void MainWindow::updateCurrentFile()
 {
     // this just grabs the first item in the list
     this->setCurrentFile(this->listModel->index(0));
+}
+
+void MainWindow::previousRow()
+{
+    QModelIndex index = this->listModel->index(this->currentFileIndex.row() - 1);
+    if (index.isValid())
+    {
+        this->selectByIndex(index);
+    }
 }
 
 void MainWindow::setCurrentFile(QModelIndex index)
@@ -590,6 +605,7 @@ void MainWindow::tryFilenameInsert()
     {
         return;
     }
+
     QString value = this->ui->nameField->text();
     int curPos = this->ui->nameField->cursorPosition();
     QString rightPart = value.right(value.length() - curPos);

@@ -61,6 +61,7 @@ public:
     void updateTargetDir();
     void updateFileList();
     void updateCurrentFile();
+    void previousRow();
     void setCurrentFile(QModelIndex index);
     void updateFilePreview();
     void cleanupFilePreview();
