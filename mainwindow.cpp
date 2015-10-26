@@ -38,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->browseDialog->setFileMode(QFileDialog::Directory);
     this->browseDialog->setOptions(QFileDialog::ShowDirsOnly);
 
+    this->volume = 50;
+
     this->resetInput(this->ui->baseField);
 
     this->selection = this->ui->fileList->selectionModel();
@@ -264,6 +266,7 @@ void MainWindow::updateFilePreview()
         this->videoItem = new QGraphicsVideoItem();
         this->playlist = new QMediaPlaylist();
         this->player = new QMediaPlayer();
+        this->player->setVolume(this->volume);
 
         // apparently we need to explicitly set a size or the call to
         // fitInView later won't know how big the QGraphicsItem is
@@ -618,6 +621,15 @@ void MainWindow::showMessage(QString message)
     this->ui->statusBar->showMessage(message);
 }
 
+void MainWindow::setVolume(int volume)
+{
+    this->volume = volume;
+    if (this->player)
+    {
+        this->player->setVolume(this->volume);
+    }
+}
+
 void MainWindow::on_baseField_textChanged(const QString &path)
 {
     this->targetPath = path;
@@ -671,4 +683,9 @@ void MainWindow::on_actionBrowse_for_base_folder_triggered()
     }
 
     this->ui->baseField->setText(dirs.first());
+}
+
+void MainWindow::on_volumeSlider_valueChanged(int value)
+{
+    this->setVolume(value);
 }

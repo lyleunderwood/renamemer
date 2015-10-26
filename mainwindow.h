@@ -53,6 +53,8 @@ public:
 
     QFileDialog *browseDialog;
 
+    int volume;
+
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
@@ -72,6 +74,7 @@ public:
     void resetInput(QLineEdit *input);
     void tryFilenameInsert();
     void showMessage(QString message);
+    void setVolume(int volume);
 
     QString sep();
     QString getCurrentFullPath();
@@ -102,6 +105,8 @@ private slots:
     void on_actionExit_triggered();
 
     void on_actionBrowse_for_base_folder_triggered();
+
+    void on_volumeSlider_valueChanged(int value);
 
 private:
     Ui::MainWindow *ui;
