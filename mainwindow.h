@@ -50,6 +50,7 @@ public:
     QMediaPlaylist *playlist;
 
     bool suppressNameChange;
+    bool numericFiles;
 
     QFileDialog *browseDialog;
 
@@ -110,6 +111,8 @@ private slots:
     void on_volumeSlider_valueChanged(int value);
 
     void on_fileList_clicked(const QModelIndex &index);
+
+    void on_checkBox_2_stateChanged(int checkedness);
 
 private:
     Ui::MainWindow *ui;

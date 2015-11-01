@@ -39,6 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->browseDialog->setOptions(QFileDialog::ShowDirsOnly);
 
     this->volume = 50;
+    this->numericFiles = false;
 
     this->resetInput(this->ui->baseField);
 
@@ -97,6 +98,7 @@ void MainWindow::updateTargetDir()
 void MainWindow::updateFileList()
 {
     QModelIndex index;
+    QStringList files;
 
     if (!this->targetDir->exists())
     {
@@ -104,7 +106,13 @@ void MainWindow::updateFileList()
     }
     else
     {
-        this->listModel->setStringList(this->targetDir->entryList(QDir::Files, QDir::Time));
+        files = this->targetDir->entryList(QDir::Files, QDir::Time);
+        if (this->numericFiles)
+        {
+            std::cout << files.first().toStdString() << std::endl;
+            files = files.filter(QRegularExpression(QString("^\\d+\\.\\w+$")));
+        }
+        this->listModel->setStringList(files);
         this->selectByIndex(this->listModel->index(0, 0));
     }
 
@@ -709,4 +717,10 @@ void MainWindow::on_volumeSlider_valueChanged(int value)
 void MainWindow::on_fileList_clicked(const QModelIndex &index)
 {
     this->ui->nameField->setFocus();
+}
+
+void MainWindow::on_checkBox_2_stateChanged(int checkedness)
+{
+    this->numericFiles = (checkedness == Qt::Checked);
+    this->updateFileList();
 }
