@@ -31,23 +31,37 @@
         </property>
         <item row="0" column="0">
          <widget class="QLabel" name="label_3">
+          <property name="toolTip">
+           <string>Folder containing the files you want to rename. The files will show up to the right. Tab completion is available.</string>
+          </property>
           <property name="text">
            <string>Base Folder</string>
           </property>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="QLineEdit" name="baseField"/>
+         <widget class="QLineEdit" name="baseField">
+          <property name="toolTip">
+           <string>Folder containing the files you want to rename. The files will show up to the right. Tab completion is available.</string>
+          </property>
+         </widget>
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_4">
+          <property name="toolTip">
+           <string>Type a new name and press ENTER/RETURN to carry out that rename and move to the next file. You can specify folders by adding slashes (including tab completion), and folders which don't already exist will be created automatically. SHIFT+ENTER for previous file.</string>
+          </property>
           <property name="text">
            <string>Filename</string>
           </property>
          </widget>
         </item>
         <item row="1" column="1">
-         <widget class="QLineEdit" name="nameField"/>
+         <widget class="QLineEdit" name="nameField">
+          <property name="toolTip">
+           <string>Type a new name and press ENTER/RETURN to carry out that rename and move to the next file. You can specify folders by adding slashes (including tab completion), and folders which don't already exist will be created automatically. SHIFT+ENTER for previous file.</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -68,6 +82,9 @@
         <layout class="QVBoxLayout" name="verticalLayout_3">
          <item>
           <widget class="QGraphicsView" name="graphicsView">
+           <property name="toolTip">
+            <string>File previews show up here. If your video files don't play you probably have codec problems. See the section in the README about codecs.</string>
+           </property>
            <property name="verticalScrollBarPolicy">
             <enum>Qt::ScrollBarAlwaysOff</enum>
            </property>
@@ -86,6 +103,9 @@
        <layout class="QFormLayout" name="formLayout">
         <item row="0" column="0">
          <widget class="QLabel" name="label">
+          <property name="toolTip">
+           <string>This is the volume at which any audio from the preview area above will play back, including audio tracks on video files.</string>
+          </property>
           <property name="text">
            <string>Volume</string>
           </property>
@@ -93,6 +113,9 @@
         </item>
         <item row="0" column="1">
          <widget class="QSlider" name="volumeSlider">
+          <property name="toolTip">
+           <string>This is the volume at which any audio from the preview area above will play back, including audio tracks on video files.</string>
+          </property>
           <property name="maximum">
            <number>100</number>
           </property>
@@ -109,6 +132,9 @@
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="label_2">
+          <property name="toolTip">
+           <string>If a file with the selected name already exists append a number to it like (2).</string>
+          </property>
           <property name="text">
            <string>Auto Increment</string>
           </property>
@@ -116,6 +142,9 @@
         </item>
         <item row="1" column="1">
          <widget class="QCheckBox" name="autoIncCheckbox">
+          <property name="toolTip">
+           <string>If a file with the selected name already exists append a number to it like (2).</string>
+          </property>
           <property name="text">
            <string/>
           </property>
@@ -123,6 +152,9 @@
         </item>
         <item row="2" column="0">
          <widget class="QLabel" name="label_5">
+          <property name="toolTip">
+           <string>Only show files whose names are numbers.</string>
+          </property>
           <property name="text">
            <string>Numeric Only</string>
           </property>
@@ -130,6 +162,9 @@
         </item>
         <item row="2" column="1">
          <widget class="QCheckBox" name="checkBox_2">
+          <property name="toolTip">
+           <string>Only show files whose names are numbers.</string>
+          </property>
           <property name="text">
            <string/>
           </property>
