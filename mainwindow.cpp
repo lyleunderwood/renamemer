@@ -110,7 +110,6 @@ void MainWindow::updateFileList()
         files = this->targetDir->entryList(QDir::Files, QDir::Time);
         if (this->numericFiles)
         {
-            std::cout << files.first().toStdString() << std::endl;
             files = files.filter(QRegularExpression(QString("^\\d+\\.\\w+$")));
         }
         this->listModel->setStringList(files);
@@ -155,7 +154,6 @@ void MainWindow::setCurrentFile(QModelIndex index)
 
 void MainWindow::commitName()
 {
-    this->cleanupFilePreview();
 
     QString value = this->ui->nameField->text();
 
@@ -169,12 +167,14 @@ void MainWindow::commitName()
             return;
         }
 
+        this->cleanupFilePreview();
         index = this->ui->fileList->selectionModel()->selectedIndexes().first();
         this->clearRow(oldIndex);
         this->selectByIndex(oldIndex);
     }
     else
     {
+        this->cleanupFilePreview();
         this->selectByIndex(index);
     }
 }
