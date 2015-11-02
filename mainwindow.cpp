@@ -40,6 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->volume = 50;
     this->numericFiles = false;
+    this->autoIncrement = false;
 
     this->resetInput(this->ui->baseField);
 
@@ -185,8 +186,16 @@ bool MainWindow::moveCurrentFile(QString newPath)
 
     if (newFile.exists())
     {
-        this->showMessage(tr("File already exists: ") + fullPath);
-        return false;
+        if (!this->autoIncrement)
+        {
+            this->showMessage(tr("File already exists: ") + fullPath);
+            return false;
+        }
+        else
+        {
+            newPath = this->findAutoIncrementName(newPath, this->dirPathWithSeparator());
+            fullPath = this->dirPathWithSeparator().append(newPath);
+        }
     }
 
     int idx = newPath.lastIndexOf(this->sep());
@@ -216,13 +225,50 @@ bool MainWindow::moveCurrentFile(QString newPath)
     QFile oldFile(this->targetDir->filePath(this->currentFileName));
     if (!oldFile.rename(fullPath))
     {
-        this->showMessage(tr("Rename operation failed for some reason: ") + oldFile.fileName());
+        this->showMessage(tr("Rename operation failed for some reason: ") + oldFile.fileName() + " to " + fullPath);
         return false;
     }
 
     this->showMessage(tr("Renamed to: ") + newPath);
 
     return true;
+}
+
+QString MainWindow::findAutoIncrementName(QString targetPath, QString basePath)
+{
+    QString newName;
+    QRegExp rx = QRegExp("\\/?(.+)\\.(\\w+)$");
+    QString name;
+    QString ext;
+    int offset = 2;
+
+    int lastSlash = targetPath.lastIndexOf(QChar('/'));
+
+    if (lastSlash == -1)
+    {
+        lastSlash = 0;
+    }
+    else
+    {
+        lastSlash++;
+    }
+
+    rx.indexIn(targetPath, lastSlash);
+
+
+    name = rx.cap(1);
+    ext = rx.cap(2);
+
+    do {
+        newName = QString("");
+        newName.append(targetPath.left(lastSlash));
+        newName.append(name);
+        newName.append(QString(" (%1)."));
+        newName.append(ext);
+        newName = newName.arg(offset++);
+    } while(QFile(basePath + newName).exists());
+
+    return newName;
 }
 
 void MainWindow::clearRow(QModelIndex index)
@@ -723,4 +769,9 @@ void MainWindow::on_checkBox_2_stateChanged(int checkedness)
 {
     this->numericFiles = (checkedness == Qt::Checked);
     this->updateFileList();
+}
+
+void MainWindow::on_autoIncCheckbox_stateChanged(int checkedness)
+{
+    this->autoIncrement = (checkedness == Qt::Checked);
 }

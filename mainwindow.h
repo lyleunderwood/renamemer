@@ -51,6 +51,7 @@ public:
 
     bool suppressNameChange;
     bool numericFiles;
+    bool autoIncrement;
 
     QFileDialog *browseDialog;
 
@@ -77,6 +78,7 @@ public:
     void tryFilenameInsert();
     void showMessage(QString message);
     void setVolume(int volume);
+    QString findAutoIncrementName(QString targetPath, QString basePath);
 
     QString sep();
     QString getCurrentFullPath();
@@ -113,6 +115,8 @@ private slots:
     void on_fileList_clicked(const QModelIndex &index);
 
     void on_checkBox_2_stateChanged(int checkedness);
+
+    void on_autoIncCheckbox_stateChanged(int checkedness);
 
 private:
     Ui::MainWindow *ui;
